@@ -21,10 +21,10 @@ object MongoToHdfs {
 
     // 创建mongodb配置
     val hadoopConf = new Configuration()
-    hadoopConf.set("mongo.input.uri", "mongodb://10.3.1.9:27017/news.newsContent")
+    hadoopConf.set("mongo.input.uri", "mongodb://host:27017/news.newsContent")
 
     val mongo = sc.newAPIHadoopRDD(hadoopConf,classOf[MongoInputFormat],classOf[Object],classOf[BSONObject])
-    val c = mongo.repartition(10).map(news => news._2).saveAsTextFile("hdfs://10.4.1.4:9000/test/mongo")
+    val c = mongo.repartition(10).map(news => news._2).saveAsTextFile("hdfs://host:9000/test/mongo")
     mongo.partitionBy().map(news => news._2).foreachPartition()
     println("-------------------"+c)
   }
